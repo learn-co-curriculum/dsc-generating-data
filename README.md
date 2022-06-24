@@ -1,4 +1,3 @@
-
 # Generating Data
 
 ## Introduction
@@ -28,39 +27,71 @@ The official documentation for this function can be found [here](https://scikit-
 
 
 ```python
-# Import other libraries
-import matplotlib.pyplot as plt
-
-import pandas as pd
-
 # Import make_blobs
-from sklearn.datasets.samples_generator import make_blobs
+from sklearn.datasets import make_blobs
 ```
 
 Let's now generate a 2D dataset of samples with three blobs as a multi-class classification prediction problem. Each observation will have two inputs and 0, 1, or 2 class values.
 
 
 ```python
-X, y = make_blobs(n_samples=100, centers=3, n_features=2)
+# Generate data
+X, y = make_blobs(n_samples=100, centers=3, n_features=2, random_state=0)
 ```
+
+
+```python
+# Preview first 10 rows of X
+X[:10]
+```
+
+
+
+
+    array([[ 2.63185834,  0.6893649 ],
+           [ 0.08080352,  4.69068983],
+           [ 3.00251949,  0.74265357],
+           [-0.63762777,  4.09104705],
+           [-0.07228289,  2.88376939],
+           [ 0.62835793,  4.4601363 ],
+           [-2.67437267,  2.48006222],
+           [-0.57748321,  3.0054335 ],
+           [ 2.72756228,  1.3051255 ],
+           [ 0.34194798,  3.94104616]])
+
+
+
+
+```python
+# Preview first 10 rows of y
+y[:10]
+```
+
+
+
+
+    array([1, 0, 1, 0, 0, 0, 2, 2, 1, 0])
+
+
 
 Now we can go ahead and visualize the results using this code:
     
 
 
 ```python
-# Plot a scatter plot, color 
-df = pd.DataFrame(dict(x=X[:,0], y=X[:,1], label=y))
-colors = {0:'red', 1:'blue', 2:'green'}
+import matplotlib.pyplot as plt
+
 fig, ax = plt.subplots()
-grouped = df.groupby('label')
-for key, group in grouped:
-    group.plot(ax=ax, kind='scatter', x='x', y='y', label=key, color=colors[key])
-plt.show()
+sc = ax.scatter(X[:,0], X[:,1], c=y)
+ax.set_xlabel("$X_0$")
+ax.set_ylabel("$X_1$")
+ax.legend(*sc.legend_elements());
 ```
 
 
-![png](index_files/index_10_0.png)
+    
+![png](index_files/index_12_0.png)
+    
 
 
 So above we see three different classes. We can generate any number of classes adapting the code above. This dataset can be used with a number of classifiers to see how accurately they perform. 
@@ -72,25 +103,24 @@ This function is used for binary classification problems with two classes and ge
 
 ```python
 from sklearn.datasets import make_moons
-X, y = make_moons(n_samples=100, noise=0.1)
+X, y = make_moons(n_samples=100, noise=0.1, random_state=0)
 ```
 
 Now we can simply use the code from last example for visualizing the data: 
 
 
 ```python
-# Plot a scatter plot, color 
-df = pd.DataFrame(dict(x=X[:,0], y=X[:,1], label=y))
-colors = {0:'red', 1:'blue', 2:'green'}
 fig, ax = plt.subplots()
-grouped = df.groupby('label')
-for key, group in grouped:
-    group.plot(ax=ax, kind='scatter', x='x', y='y', label=key, color=colors[key])
-plt.show()
+sc = ax.scatter(X[:,0], X[:,1], c=y, cmap="winter")
+ax.set_xlabel("$X_0$")
+ax.set_ylabel("$X_1$")
+ax.legend(*sc.legend_elements());
 ```
 
 
-![png](index_files/index_16_0.png)
+    
+![png](index_files/index_18_0.png)
+    
 
 
 The noise parameter controls the shape of the data generated. Give it different values from 0 to 1 above and inspect the outcome. 0 noise would generate perfect moon shapes and 1 would be just noise and no underlying pattern. We can also see that this pattern is not "linearly separable", i.e., we can not draw a straight line to separate classes, this helps us try our non-linear classification functions (like _sigmoid_ and _tanh_ etc.)
@@ -109,18 +139,17 @@ Bring in the plotting code from previous examples:
 
 
 ```python
-# Plot a scatter plot, color 
-df = pd.DataFrame(dict(x=X[:,0], y=X[:,1], label=y))
-colors = {0:'red', 1:'blue', 2:'green'}
 fig, ax = plt.subplots()
-grouped = df.groupby('label')
-for key, group in grouped:
-    group.plot(ax=ax, kind='scatter', x='x', y='y', label=key, color=colors[key])
-plt.show()
+sc = ax.scatter(X[:,0], X[:,1], c=y, cmap="Wistia")
+ax.set_xlabel("$X_0$")
+ax.set_ylabel("$X_1$")
+ax.legend(*sc.legend_elements());
 ```
 
 
-![png](index_files/index_22_0.png)
+    
+![png](index_files/index_24_0.png)
+    
 
 
 This is also suitable for testing complex, non-linear classifiers. 
@@ -132,18 +161,21 @@ This function allows you to create datasets that can be used to test regression 
 
 ```python
 from sklearn.datasets import make_regression
-X, y = make_regression(n_samples=100, n_features=1, noise=0.1)
+X, y = make_regression(n_samples=100, n_features=1, noise=3, random_state=0)
 ```
 
 
 ```python
-# Plot regression dataset
-plt.scatter(X,y)
-plt.show()
+fig, ax = plt.subplots()
+ax.scatter(X, y, alpha=0.5)
+ax.set_xlabel("x")
+ax.set_ylabel("y");
 ```
 
 
-![png](index_files/index_27_0.png)
+    
+![png](index_files/index_29_0.png)
+    
 
 
 We can further tweak the generated parameters to create non-linear relationships that can be solved using non-linear regression techniques:  
@@ -155,23 +187,25 @@ y2 = y**2
 y3 = y**3
 
 # Visualize this data
-plt.scatter(X, y2)
-plt.show()
-plt.scatter(X, y3)
-plt.show()
+fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12,4))
+ax1.scatter(X, y2, alpha=0.5, color="orange")
+ax1.set_title("Squared Transformation")
+ax2.scatter(X, y3, alpha=0.5, color="cyan")
+ax2.set_title("Cubed Transformation")
+for ax in (ax1, ax2):
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
 ```
 
 
-![png](index_files/index_29_0.png)
-
-
-
-![png](index_files/index_29_1.png)
+    
+![png](index_files/index_31_0.png)
+    
 
 
 ## Level up (Optional)
 
-`sklearn` comes with a lot of data generation functions. We have seen a few popular ones above. Kindly visit [this link](https://scikit-learn.org/stable/datasets/index.html) to look at more such functions (along with some real world datasets). 
+`sklearn` comes with a lot of data generation functions. We have seen a few popular ones above. Kindly visit [this link](https://scikit-learn.org/stable/datasets) to look at more such functions (along with some real world datasets). 
 
 ## Summary 
 
