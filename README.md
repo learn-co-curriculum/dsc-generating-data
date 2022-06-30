@@ -12,7 +12,7 @@ You will be able to :
 
 ## Practice datasets
 
-Practice datasets allow testing and debugging of the algorithms and test its robustness. They are also used for understanding the behavior of algorithms in response to changes in model parameters as we shall see with some ML algorithms. Following are some of the reasons why such datasets are preferred over real-world datasets: 
+Practice datasets allow for debugging of algorithms and testing their robustness. They are also used for understanding the behavior of algorithms in response to changes in model parameters as we shall see with some ML algorithms. Following are some of the reasons why such datasets are preferred over real-world datasets: 
 
 - Quick and easy generation - save data collection time  and efforts
 - Predictable outcomes - have a higher degree of confidence in the result
